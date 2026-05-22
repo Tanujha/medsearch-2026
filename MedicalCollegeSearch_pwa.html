@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="MedSearch 2026">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.svg">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+<title>India PG Medical College Search 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f4f4;color:#1a1a1a;min-height:100vh}
+.page{max-width:920px;margin:0 auto;padding:28px 20px}
+h1{font-size:22px;font-weight:500;margin-bottom:4px}
+.subtitle{font-size:13px;color:#aaa;margin-bottom:24px}
+/* Search bar */
+.sbar{position:relative;margin-bottom:18px}
+.sbar input{width:100%;height:48px;padding:0 48px 0 18px;font-size:15px;border:1.5px solid #ddd;border-radius:12px;background:#fff;outline:none}
+.sbar input:focus{border-color:#555}
+.sbar-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:#ccc;font-size:20px;pointer-events:none}
+/* Filter card */
+.fcard{background:#fff;border-radius:12px;border:1px solid #e8e8e8;padding:20px;margin-bottom:18px}
+.sec-hdr{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#bbb;padding-bottom:8px;border-bottom:1px solid #f0f0f0;margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:11px;font-weight:600;color:#aaa;letter-spacing:.02em}
+select{width:100%;height:38px;padding:0 10px;font-size:13px;border:1.5px solid #e8e8e8;border-radius:8px;background:#fff;color:#1a1a1a;cursor:pointer;outline:none}
+select:focus{border-color:#888}
+select:disabled{opacity:.4;cursor:default}
+.static-badge{height:38px;border:1.5px solid #e8e8e8;border-radius:8px;background:#fafafa;display:flex;align-items:center;padding:0 12px;font-size:13px;color:#555;gap:8px}
+.static-badge span{font-size:11px;color:#bbb}
+/* Spec search */
+.spec-wrap{position:relative}
+.spec-row{display:flex;align-items:center;min-height:38px;border:1.5px solid #e8e8e8;border-radius:8px;background:#fff;padding:4px 8px;gap:4px;flex-wrap:wrap;cursor:text}
+.spec-row:focus-within{border-color:#888}
+.spec-row input{flex:1;min-width:120px;border:none;outline:none;font-size:13px;background:transparent;color:#1a1a1a;padding:2px 4px}
+.spec-pill{display:inline-flex;align-items:center;gap:4px;background:#e8f0fe;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:500;color:#1a56b0;white-space:nowrap;max-width:220px}
+.spec-pill-txt{overflow:hidden;text-overflow:ellipsis}
+.spec-x{cursor:pointer;font-size:13px;color:#1a56b0;line-height:1;padding:0 2px;flex-shrink:0}
+.spec-x:hover{color:#c00}
+.spec-dd{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1.5px solid #e0e0e0;border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,.09);z-index:300;max-height:300px;overflow-y:auto;display:none}
+.spec-dd.open{display:block}
+.spec-ghdr{padding:8px 12px 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#bbb;background:#fff;border-bottom:1px solid #f5f5f5;position:sticky;top:0}
+.spec-opt{padding:7px 14px;font-size:13px;color:#333;cursor:pointer}
+.spec-opt:hover,.spec-opt.hi{background:#f5f5f5}
+.spec-opt.sel{color:#1a56b0;font-weight:500}
+.spec-nores{padding:14px;font-size:13px;color:#bbb;text-align:center}
+/* Tags */
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;padding-top:12px;border-top:1px solid #f2f2f2;align-items:center}
+.tag{font-size:11px;background:#f5f5f5;border:1px solid #e8e8e8;border-radius:99px;padding:3px 10px;color:#555}
+.tag b{color:#bbb;font-weight:400;margin-right:3px}
+.btn-reset{font-size:12px;padding:5px 12px;border-radius:8px;border:1.5px solid #e0e0e0;background:#fff;color:#888;cursor:pointer;margin-left:auto}
+/* Results */
+.rcount{font-size:12px;color:#aaa;margin-bottom:12px}
+.empty{text-align:center;padding:48px;color:#ccc;font-size:14px}
+/* College card */
+.ccard{background:#fff;border-radius:12px;border:1px solid #e8e8e8;margin-bottom:10px;overflow:hidden;transition:border-color .15s;cursor:pointer}
+.ccard:hover{border-color:#bbb}
+.ccard.open{border:1.5px solid #333;cursor:default}
+.ch{padding:14px 18px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;cursor:pointer}
+.ccard.open .ch{cursor:pointer}
+.ctitle{font-size:15px;font-weight:500;margin-bottom:3px}
+.csub{font-size:12px;color:#888}
+.cbadges{display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+.badge{font-size:11px;padding:3px 8px;border-radius:6px;font-weight:500;white-space:nowrap}
+.b-blue{background:#e8f0fe;color:#1a56b0}
+.b-green{background:#e6f4ea;color:#1e6b37}
+.b-amber{background:#fef3e2;color:#9c5700}
+.b-purple{background:#f3e8fd;color:#6b1fb1}
+.b-red{background:#fce8e6;color:#c5221f}
+.b-grey{background:#f0f0f0;color:#666}
+/* Detail panel */
+.cdetail{display:none;padding:0 18px 22px;border-top:1px solid #f5f5f5}
+.cdetail.open{display:block}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}
+.mbox{background:#f9f9f9;border-radius:8px;padding:10px 12px;text-align:center}
+.mval{font-size:14px;font-weight:500;line-height:1.3;margin-bottom:3px}
+.mkey{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:.05em}
+.det2{display:grid;grid-template-columns:1fr 1fr;gap:0 28px}
+.dsec{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#bbb;margin:18px 0 8px;padding-bottom:6px;border-bottom:1px solid #f0f0f0}
+.dr{display:flex;gap:10px;padding:5px 0;border-bottom:1px solid #fafafa;align-items:flex-start}
+.dr:last-child{border:none}
+.dk{font-size:11px;color:#aaa;font-weight:500;min-width:120px;flex-shrink:0;padding-top:1px;line-height:1.4}
+.dv{font-size:12px;color:#333;line-height:1.5}
+/* Specializations in detail */
+.spec-section{margin-top:20px;padding-top:16px;border-top:1px solid #f0f0f0}
+.spec-sec-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#bbb;margin-bottom:12px}
+.spec-raw{background:#fafafa;border:1px solid #f0f0f0;border-radius:8px;padding:12px 14px;font-size:12px;color:#555;line-height:1.7;margin-bottom:14px}
+.spec-raw b{font-size:10px;color:#aaa;display:block;margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.spec-active-pill{background:#e8f4fd;border:1px solid #c5daf6;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#1a56b0}
+.spec-active-pill b{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:3px}
+.sdeg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sdeg{border:1px solid #ebebeb;border-radius:8px;overflow:hidden}
+.sdeg-hdr{padding:7px 12px;font-size:11px;font-weight:600;display:flex;justify-content:space-between;align-items:center;border-radius:0}
+.sdeg-cnt{font-size:10px;font-weight:400;opacity:.75}
+.sgrp-name{padding:5px 12px 3px;font-size:10px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.06em;background:#fafafa;border-top:1px solid #f0f0f0}
+.sitem{padding:5px 12px;font-size:11px;color:#444;border-top:1px solid #f8f8f8;line-height:1.4}
+.sitem.match{background:#e8f0fe;color:#1a56b0;font-weight:500}
+</style>
+</head>
+<body>
+<div class="page">
+  <div id="install-banner" style="display:none;background:#1a56b0;color:#fff;border-radius:12px;padding:14px 18px;margin-bottom:18px;display:none;align-items:center;justify-content:space-between;gap:12px;">
+    <div>
+      <div style="font-size:14px;font-weight:500;margin-bottom:2px;">Install this app</div>
+      <div style="font-size:12px;opacity:.8;">Add to home screen for offline access</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-shrink:0">
+      <button id="install-btn" style="background:#fff;color:#1a56b0;border:none;border-radius:8px;padding:7px 16px;font-size:13px;font-weight:600;cursor:pointer;">Install</button>
+      <button onclick="document.getElementById('install-banner').style.display='none'" style="background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:8px;padding:7px 10px;font-size:13px;cursor:pointer;">✕</button>
+    </div>
+  </div>
+
+  <h1>India PG Medical College Search 2026</h1>
+  <p class="subtitle">177 colleges &middot; NEET PG &middot; INI-CET &middot; NEET MDS &middot; NEET SS &middot; NMC Seat Matrix 2025-26</p>
+
+  <div class="sbar">
+    <input type="text" id="txt" placeholder="Search college, city or state&hellip;" oninput="onSearch()">
+    <span class="sbar-icon">&#128269;</span>
+  </div>
+
+  <div class="fcard">
+    <div style="display:flex;align-items:center;margin-bottom:16px">
+      <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#bbb">Filters</span>
+      <button class="btn-reset" id="btn-reset" onclick="resetAll()" style="display:none">Reset all</button>
+    </div>
+
+    <!-- COURSE -->
+    <div style="margin-bottom:20px">
+      <div class="sec-hdr">Course</div>
+      <div class="grid2" style="margin-bottom:12px">
+        <div class="fg">
+          <label>Course level</label>
+          <div class="static-badge">PG <span>Postgraduate</span></div>
+        </div>
+        <div class="fg">
+          <label>Degree</label>
+          <select id="f-degree" onchange="onDegreeChange()">
+            <option value="">— All degrees —</option>
+            <option value="MD">MD — Doctor of Medicine (33)</option>
+            <option value="MS">MS — Master of Surgery (7)</option>
+            <option value="MDS">MDS — Master of Dental Surgery (9)</option>
+            <option value="Diploma">PG Diploma (23)</option>
+            <option value="DNB">DNB — Diplomate of National Board (29)</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg" id="fg-spec">
+        <label>Specialization</label>
+        <div class="spec-wrap" id="spec-wrap">
+          <div class="spec-row" onclick="focusSpecInput()">
+            <span id="spec-pill-slot"></span>
+            <input type="text" id="spec-txt" placeholder="Type to search specializations&hellip;"
+              autocomplete="off" oninput="onSpecInput()" onfocus="openSpecDD()">
+          </div>
+          <div class="spec-dd" id="spec-dd"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INSTITUTION -->
+    <div style="margin-bottom:20px">
+      <div class="sec-hdr">Institution</div>
+      <div class="grid2" style="margin-bottom:12px">
+        <div class="fg">
+          <label>Institution type</label>
+          <select id="f-inst" onchange="onInstChange()">
+            <option value="">— All —</option>
+            <option value="cn">Central and National</option>
+            <option value="state">State</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>College type</label>
+          <select id="f-ctype" onchange="onCtypeChange()"><option value="">— All —</option></select>
+        </div>
+      </div>
+      <div class="fg" id="fg-cat" style="display:none">
+        <label>College category</label>
+        <select id="f-cat" onchange="onCatChange()"><option value="">— All categories —</option></select>
+      </div>
+    </div>
+
+    <!-- LOCATION -->
+    <div>
+      <div class="sec-hdr">Location &amp; College</div>
+      <div class="grid3">
+        <div class="fg"><label>State</label>
+          <select id="f-state" onchange="onStateChange()"><option value="">— All —</option></select>
+        </div>
+        <div class="fg"><label>City</label>
+          <select id="f-city" onchange="onCityChange()"><option value="">— All —</option></select>
+        </div>
+        <div class="fg"><label>College name</label>
+          <select id="f-college" onchange="onCollegeSelect()"><option value="">— All —</option></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="tags" id="tag-bar" style="display:none"></div>
+  </div>
+
+  <div class="rcount" id="rcount"></div>
+  <div id="results"></div>
+</div>
+
+<script>
+const EXAM_DATA = {"NEET PG 2026": {"Test / Exam Name": "NEET PG 2026", "Exam Date": "30 August 2026", "Result Date": "~Sep–Oct 2026", "Registration Opens": "Last week April 2026", "Registration Closes": "Last week May 2026", "City Intimation Slip": "14 August 2026", "Admit Card Release": "~17–18 August 2026", "Application Link": "natboard.edu.in", "MCC AIQ Counselling": "Oct–Dec 2026 (4 rounds — mcc.nic.in)", "Negative Marking": "Yes — −1 per wrong answer (+4 correct)", "Karnataka KEA Counselling": "Post result — Oct–Dec 2026 (kea.kar.nic.in)", "No. of Questions": "200 MCQs", "Duration": "3 hrs 30 min", "Session": "Annual", "Exam Fee (General)": "₹3,500 (Gen/OBC) | ₹2,500 (SC/ST/PwD)", "Age Limit": "No age limit", "Qualifying Percentile": "50th percentile (Gen) | 45th (SC/ST/OBC/PwD)", "Eligibility": "MBBS from NMC-recognised college + Internship completed by 30 Sep 2026 + NMC/SMC registration"}, "INI-CET July 2026 (for July session)": {"Test / Exam Name": "INI-CET July 2026 (for July session)", "Exam Date": "16 May 2026", "Result Date": "23 May 2026", "Registration Opens": "28 March 2026", "Registration Closes": "25 April 2026", "City Intimation Slip": "On Admit Card", "Admit Card Release": "9 May 2026", "Application Link": "aiimsexams.ac.in", "MCC AIQ Counselling": "Not applicable — AIIMS conducts own counselling (4 rounds)", "Negative Marking": "Yes — −1/3 per wrong answer (+1 correct)", "Karnataka KEA Counselling": "Not applicable (INI-CET colleges not under KEA)", "No. of Questions": "200 MCQs (4 sections × 50; non-returnable, 45 min each)", "Duration": "3 hours", "Session": "Twice a year (July + January)", "Exam Fee (General)": "₹4,000 (Gen/OBC/OCI) | ₹3,200 (SC/ST/EWS) | ₹0 (PwBD)", "Age Limit": "No age limit", "Qualifying Percentile": "50th percentile (Gen/EWS/Foreign) | 45th (SC/ST/OBC/PwBD)", "Eligibility": "MBBS (for MD/MS) or BDS (for MDS) from NMC/DCI-recognised college + Internship by 31 Jul 2026 + NMC/DCI/SMC registration"}, "NEET MDS 2026": {"Test / Exam Name": "NEET MDS 2026", "Exam Date": "2 May 2026", "Result Date": "~2 June 2026", "Registration Opens": "14 March 2026", "Registration Closes": "30 March 2026", "City Intimation Slip": "~28 April 2026", "Admit Card Release": "29 April 2026", "Application Link": "natboard.edu.in", "MCC AIQ Counselling": "July–Sep 2026 (50% AIQ + 100% deemed — mcc.nic.in)", "Negative Marking": "Yes — 25% (−1 per wrong answer; +4 correct)", "Karnataka KEA Counselling": "Post result — Aug–Oct 2026 (KEA MDS counselling)", "No. of Questions": "240 MCQs (Part A: 100 Qs + Part B: 140 Qs)", "Duration": "3 hours (180 min)", "Session": "Annual", "Exam Fee (General)": "₹3,500 (Gen/OBC/EWS) | ₹2,500 (SC/ST/PwD)", "Age Limit": "Min 20 years | No upper limit", "Qualifying Percentile": "50th percentile (Gen) | 40th (SC/ST/OBC/PwD)", "Eligibility": "BDS from DCI-recognised college + 12-month internship by 30 Jun 2026 + DCI/SDC registration"}, "NEET SS 2026": {"Test / Exam Name": "NEET SS 2026", "Exam Date": "26–27 December 2026", "Result Date": "~January 2027", "Registration Opens": "4th week August 2026", "Registration Closes": "~Sep–Oct 2026", "City Intimation Slip": "~December 2026", "Admit Card Release": "22 December 2026", "Application Link": "natboard.edu.in", "MCC AIQ Counselling": "Feb–Mar 2027 (2 rounds — mcc.nic.in)", "Negative Marking": "Yes — −1 per wrong answer (+4 correct)", "Karnataka KEA Counselling": "State quota SS seats via state body (limited Karnataka SS seats)", "No. of Questions": "150 MCQs (3 time-bound sections × 50; 50 min each)", "Duration": "2 hours 30 min", "Session": "Annual", "Exam Fee (General)": "₹3,500 (General)", "Age Limit": "No age limit", "Qualifying Percentile": "50th percentile (General)", "Eligibility": "MD/MS/DNB in eligible feeder speciality + PG completion by 30 Apr 2026 + NMC/SMC registration"}};
+const RAW = [{"exam": "NEET PG 2026", "College Name": "Andhra Medical College", "City": "Visakhapatnam", "State": "Andhra Pradesh", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1.5 Lakh/yr (Govt quota)", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "KNRUHS State Counselling + MCC AIQ", "PG Seats (approx)": "~120 PG seats", "Admission Route": "50% AIQ via MCC + 50% State Quota via KNRUHS"}, {"exam": "NEET PG 2026", "College Name": "Guntur Medical College", "City": "Guntur", "State": "Andhra Pradesh", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1.5 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "KNRUHS State Counselling + MCC AIQ", "PG Seats (approx)": "~100 PG seats", "Admission Route": "50% AIQ via MCC + 50% State Quota via KNRUHS"}, {"exam": "NEET PG 2026", "College Name": "Rangaraya Medical College", "City": "Kakinada", "State": "Andhra Pradesh", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1.5 Lakh/yr", "Specializations (PG)": "MD/MS — General Medicine, Surgery, OBG, Paeds, Ortho, Radiology, ENT, Ophthalmology, Pathology, Microbiology, others", "Who Manages Counselling": "KNRUHS + MCC AIQ", "PG Seats (approx)": "~100 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Kurnool Medical College", "City": "Kurnool", "State": "Andhra Pradesh", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1.5 Lakh/yr", "Specializations (PG)": "MD/MS — Major clinical + non-clinical specialities", "Who Manages Counselling": "KNRUHS + MCC AIQ", "PG Seats (approx)": "~100 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "SV Medical College", "City": "Tirupati", "State": "Andhra Pradesh", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1.5 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "KNRUHS + MCC AIQ", "PG Seats (approx)": "~100 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Gauhati Medical College", "City": "Guwahati", "State": "Assam", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "SSUHS State + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Assam Medical College", "City": "Dibrugarh", "State": "Assam", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "SSUHS State + MCC AIQ", "PG Seats (approx)": "~60 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Silchar Medical College", "City": "Silchar", "State": "Assam", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "SSUHS State + MCC AIQ", "PG Seats (approx)": "~50 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Patna Medical College", "City": "Patna", "State": "Bihar", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — All major clinical and non-clinical specialities", "Who Manages Counselling": "BCECEB State + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% State Quota via BCECEB"}, {"exam": "NEET PG 2026", "College Name": "Nalanda Medical College", "City": "Patna", "State": "Bihar", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "BCECEB State + MCC AIQ", "PG Seats (approx)": "~60 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Darbhanga Medical College", "City": "Darbhanga", "State": "Bihar", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "BCECEB State + MCC AIQ", "PG Seats (approx)": "~50 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Jawaharlal Nehru Medical College, Bhagalpur", "City": "Bhagalpur", "State": "Bihar", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "BCECEB State + MCC AIQ", "PG Seats (approx)": "~50 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Pt. JNM Medical College, Raipur", "City": "Raipur", "State": "Chhattisgarh", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "CGDME State + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% State Quota via CGDME"}, {"exam": "NEET PG 2026", "College Name": "CIMS, Bilaspur", "City": "Bilaspur", "State": "Chhattisgarh", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "CGDME State + MCC AIQ", "PG Seats (approx)": "~40 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Maulana Azad Medical College (MAMC)", "City": "New Delhi", "State": "Delhi", "College Type": "Central Govt", "Potential PG Fee / Year": "₹20,000–₹50,000/yr (Govt rates)", "Specializations (PG)": "MD/MS — All specialities incl. Radiology, Dermatology, Psychiatry, Anaesthesia, Medicine, Surgery, Paeds, OBG, Ortho, ENT, Ophth, Pathology, etc.", "Who Manages Counselling": "MCC AIQ (Central seats)", "PG Seats (approx)": "~240 PG seats", "Admission Route": "100% via MCC AIQ (Central Govt college)"}, {"exam": "NEET PG 2026", "College Name": "Lady Hardinge Medical College (LHMC)", "City": "New Delhi", "State": "Delhi", "College Type": "Central Govt (Women)", "Potential PG Fee / Year": "₹20,000–₹50,000/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "MCC AIQ (Central seats)", "PG Seats (approx)": "~180 PG seats", "Admission Route": "100% via MCC AIQ"}, {"exam": "NEET PG 2026", "College Name": "VMMC & Safdarjung Hospital", "City": "New Delhi", "State": "Delhi", "College Type": "Central Govt", "Potential PG Fee / Year": "₹20,000–₹50,000/yr", "Specializations (PG)": "MD/MS — All major specialities + some DM/MCh", "Who Manages Counselling": "MCC AIQ (Central seats)", "PG Seats (approx)": "~200 PG seats", "Admission Route": "100% via MCC AIQ"}, {"exam": "NEET PG 2026", "College Name": "University College of Medical Sciences (UCMS)", "City": "New Delhi", "State": "Delhi", "College Type": "Central Govt", "Potential PG Fee / Year": "₹20,000–₹50,000/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "MCC AIQ (Central seats)", "PG Seats (approx)": "~120 PG seats", "Admission Route": "100% via MCC AIQ"}, {"exam": "NEET PG 2026", "College Name": "Dr. Baba Saheb Ambedkar Medical College", "City": "Rohini, Delhi", "State": "Delhi", "College Type": "State Govt", "Potential PG Fee / Year": "₹50,000–₹2 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "DGHS Delhi State", "PG Seats (approx)": "~50 PG seats", "Admission Route": "50% AIQ + 50% Delhi State Quota"}, {"exam": "NEET PG 2026", "College Name": "Goa Medical College", "City": "Panaji", "State": "Goa", "College Type": "State Govt", "Potential PG Fee / Year": "₹50,000–₹2 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "GIPMCE State + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "BJ Medical College, Ahmedabad", "City": "Ahmedabad", "State": "Gujarat", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — All major clinical + non-clinical specialities", "Who Manages Counselling": "ACPUGMEC Gujarat + MCC AIQ", "PG Seats (approx)": "~120 PG seats", "Admission Route": "50% AIQ + 50% State Quota via ACPUGMEC"}, {"exam": "NEET PG 2026", "College Name": "Government Medical College, Surat", "City": "Surat", "State": "Gujarat", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "ACPUGMEC Gujarat + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Medical College Baroda, Vadodara", "City": "Vadodara", "State": "Gujarat", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "ACPUGMEC Gujarat + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "MP Shah Medical College, Jamnagar", "City": "Jamnagar", "State": "Gujarat", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "ACPUGMEC Gujarat + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "PGIMS Rohtak (Pt. BD Sharma)", "City": "Rohtak", "State": "Haryana", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS/DM/MCh — All specialities including super-specialities", "Who Manages Counselling": "UHSR Haryana + MCC AIQ", "PG Seats (approx)": "~200 PG seats", "Admission Route": "50% AIQ + 50% State Quota via UHSR"}, {"exam": "NEET PG 2026", "College Name": "Kalpana Chawla Govt. Medical College, Karnal", "City": "Karnal", "State": "Haryana", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "UHSR Haryana + MCC AIQ", "PG Seats (approx)": "~50 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Indira Gandhi Medical College (IGMC), Shimla", "City": "Shimla", "State": "Himachal Pradesh", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "HPMC State + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% State Quota via HPMC"}, {"exam": "NEET PG 2026", "College Name": "Dr. Rajendra Prasad Govt. Medical College, Tanda", "City": "Kangra (Tanda)", "State": "Himachal Pradesh", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "HPMC State + MCC AIQ", "PG Seats (approx)": "~60 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Government Medical College, Srinagar", "City": "Srinagar", "State": "Jammu & Kashmir", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "JKBOPEE State + MCC AIQ", "PG Seats (approx)": "~100 PG seats", "Admission Route": "50% AIQ + 50% State Quota via JKBOPEE"}, {"exam": "NEET PG 2026", "College Name": "Government Medical College, Jammu", "City": "Jammu", "State": "Jammu & Kashmir", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "JKBOPEE State + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "SKIMS, Srinagar", "City": "Srinagar", "State": "Jammu & Kashmir", "College Type": "State Govt (INI-type)", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS/DM/MCh — All specialities", "Who Manages Counselling": "JKBOPEE + MCC AIQ", "PG Seats (approx)": "~100 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Rajendra Institute of Medical Sciences (RIMS)", "City": "Ranchi", "State": "Jharkhand", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "JCECEB State + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "MGM Medical College, Jamshedpur", "City": "Jamshedpur", "State": "Jharkhand", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "JCECEB State + MCC AIQ", "PG Seats (approx)": "~50 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Bangalore Medical College & Research Institute (BMCRI)", "City": "Bengaluru", "State": "Karnataka", "College Type": "State Govt Autonomous", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr (Govt quota) | ₹1–5 Lakh (Q quota) | Stipend: ₹60,000–₹70,000/month", "Specializations (PG)": "MD/MS — Medicine, Surgery, Paediatrics, OBG, Orthopaedics, Radiology, Dermatology, Psychiatry, Anaesthesia, ENT, Ophthalmology, Pathology, Microbiology, Forensic Medicine, Community Medicine, Pharmacology, Physiology, Anatomy, Biochemistry + DM/MCh (Neurosurgery, Urology, Plastic Surgery, Gastroenterology)", "Who Manages Counselling": "KEA PGET (State Private + Q quota) + MCC AIQ (50% govt seats)", "PG Seats (approx)": "~280 PG seats", "Admission Route": "50% AIQ via MCC | 50% State Quota via KEA | Q quota open to all India"}, {"exam": "NEET PG 2026", "College Name": "Mysore Medical College & Research Institute (MMCRI)", "City": "Mysuru", "State": "Karnataka", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr | Stipend: ₹55,000–₹65,000/month", "Specializations (PG)": "MD/MS — Medicine, Surgery, OBG, Paediatrics, Ortho, Radiology, Dermatology, Psychiatry, ENT, Ophthalmology, Anaesthesia, Pathology, Microbiology, Community Medicine, Forensic Medicine", "Who Manages Counselling": "KEA PGET + MCC AIQ", "PG Seats (approx)": "~180 PG seats", "Admission Route": "50% AIQ via MCC | 50% State Quota via KEA"}, {"exam": "NEET PG 2026", "College Name": "Karnataka Institute of Medical Sciences (KIMS), Hubballi", "City": "Hubballi", "State": "Karnataka", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr | Stipend: ₹55,000/month", "Specializations (PG)": "MD/MS — Medicine, Surgery, OBG, Paediatrics, Ortho, Radiology, ENT, Ophthalmology, Anaesthesia, Dermatology, Pathology, Microbiology, Community Medicine, others", "Who Manages Counselling": "KEA PGET + MCC AIQ", "PG Seats (approx)": "~150 PG seats", "Admission Route": "50% AIQ via MCC | 50% State Quota via KEA"}, {"exam": "NEET PG 2026", "College Name": "Vijayanagar Institute of Medical Sciences (VIMS)", "City": "Ballari", "State": "Karnataka", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr | Stipend: ₹55,000/month", "Specializations (PG)": "MD/MS — Medicine, Surgery, OBG, Paeds, Ortho, Radiology, ENT, Ophthalmology, Anaesthesia, Pathology, Microbiology, Dermatology, Community Medicine", "Who Manages Counselling": "KEA PGET + MCC AIQ", "PG Seats (approx)": "~130 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "ESIC Medical College & PGIMSR, Bengaluru", "City": "Bengaluru", "State": "Karnataka", "College Type": "Central Govt — ESIC", "Potential PG Fee / Year": "₹20,000–₹50,000/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "MCC AIQ (ESIC seats)", "PG Seats (approx)": "~54 PG seats", "Admission Route": "100% via MCC AIQ (ESIC quota)"}, {"exam": "NEET PG 2026", "College Name": "ESIC Medical College, Kalaburagi", "City": "Kalaburagi", "State": "Karnataka", "College Type": "Central Govt — ESIC", "Potential PG Fee / Year": "₹20,000–₹50,000/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "MCC AIQ (ESIC seats)", "PG Seats (approx)": "~40 PG seats", "Admission Route": "100% via MCC AIQ (ESIC quota)"}, {"exam": "NEET PG 2026", "College Name": "Raichur Institute of Medical Sciences (RIMS)", "City": "Raichur", "State": "Karnataka", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Medicine, Surgery, OBG, Paeds, Ortho, ENT, Ophthalmology, Anaesthesia, Pathology, Microbiology, Community Medicine", "Who Manages Counselling": "KEA PGET + MCC AIQ", "PG Seats (approx)": "~70 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Shimoga Institute of Medical Sciences (SIMS)", "City": "Shivamogga", "State": "Karnataka", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "KEA PGET + MCC AIQ", "PG Seats (approx)": "~100 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Hassan Institute of Medical Sciences (HIMS)", "City": "Hassan", "State": "Karnataka", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "KEA PGET + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Mandya Institute of Medical Sciences (MIMS)", "City": "Mandya", "State": "Karnataka", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "KEA PGET + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Belagavi Institute of Medical Sciences (BIMS)", "City": "Belagavi", "State": "Karnataka", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "KEA PGET + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Bidar Institute of Medical Sciences (BRIMS)", "City": "Bidar", "State": "Karnataka", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "KEA PGET + MCC AIQ", "PG Seats (approx)": "~60 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Gadag Institute of Medical Sciences", "City": "Gadag", "State": "Karnataka", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "KEA PGET + MCC AIQ", "PG Seats (approx)": "~50 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Gulbarga Institute of Medical Sciences", "City": "Kalaburagi", "State": "Karnataka", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "KEA PGET + MCC AIQ", "PG Seats (approx)": "~50 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Government Medical College, Thiruvananthapuram", "City": "Thiruvananthapuram", "State": "Kerala", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr | Stipend: ₹55,000–₹65,000/month", "Specializations (PG)": "MD/MS/DM/MCh — All specialities including DM Cardiology, DM Neurology, MCh Neurosurgery, etc.", "Who Manages Counselling": "Kerala COMED-K / KUHS State + MCC AIQ", "PG Seats (approx)": "~150 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Government Medical College, Kozhikode (Calicut)", "City": "Kozhikode", "State": "Kerala", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "KUHS State + MCC AIQ", "PG Seats (approx)": "~120 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Government Medical College, Kottayam", "City": "Kottayam", "State": "Kerala", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "KUHS State + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Gandhi Medical College, Bhopal (GMCH)", "City": "Bhopal", "State": "Madhya Pradesh", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "MPPEB State + MCC AIQ", "PG Seats (approx)": "~100 PG seats", "Admission Route": "50% AIQ + 50% State Quota via MPPEB"}, {"exam": "NEET PG 2026", "College Name": "MY Hospital / MGMMH, Indore", "City": "Indore", "State": "Madhya Pradesh", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "MPPEB State + MCC AIQ", "PG Seats (approx)": "~100 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Government Medical College, Jabalpur", "City": "Jabalpur", "State": "Madhya Pradesh", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "MPPEB State + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "BJ Medical College, Pune", "City": "Pune", "State": "Maharashtra", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1.5 Lakh/yr", "Specializations (PG)": "MD/MS/DM/MCh — All specialities including DM Cardiology, Neurology, MCh Neurosurgery, Plastic Surgery", "Who Manages Counselling": "CET Cell Maharashtra + MCC AIQ", "PG Seats (approx)": "~150 PG seats", "Admission Route": "50% AIQ + 50% Maharashtra State Quota via CET Cell"}, {"exam": "NEET PG 2026", "College Name": "Grant Medical College, Mumbai (JJ Group)", "City": "Mumbai", "State": "Maharashtra", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1.5 Lakh/yr", "Specializations (PG)": "MD/MS/DM/MCh — All specialities", "Who Manages Counselling": "CET Cell Maharashtra + MCC AIQ", "PG Seats (approx)": "~150 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Seth GS Medical College (KEM Hospital)", "City": "Mumbai", "State": "Maharashtra", "College Type": "State Govt (Municipal)", "Potential PG Fee / Year": "₹30,000–₹1.5 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "CET Cell Maharashtra + MCC AIQ", "PG Seats (approx)": "~120 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Topiwala National Medical College (Nair Hospital)", "City": "Mumbai", "State": "Maharashtra", "College Type": "State Govt (Municipal)", "Potential PG Fee / Year": "₹30,000–₹1.5 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "CET Cell Maharashtra + MCC AIQ", "PG Seats (approx)": "~100 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Government Medical College, Nagpur", "City": "Nagpur", "State": "Maharashtra", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1.5 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "CET Cell Maharashtra + MCC AIQ", "PG Seats (approx)": "~100 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Government Medical College, Aurangabad", "City": "Aurangabad", "State": "Maharashtra", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1.5 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "CET Cell Maharashtra + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "SCB Medical College, Cuttack", "City": "Cuttack", "State": "Odisha", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "OJEE/OSEPA State + MCC AIQ", "PG Seats (approx)": "~120 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "VSS Medical College, Burla / Sambalpur", "City": "Sambalpur", "State": "Odisha", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "OJEE State + MCC AIQ", "PG Seats (approx)": "~100 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "MKCG Medical College, Berhampur", "City": "Berhampur", "State": "Odisha", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "OJEE State + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Government Medical College, Amritsar", "City": "Amritsar", "State": "Punjab", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "BFUHS State + MCC AIQ", "PG Seats (approx)": "~100 PG seats", "Admission Route": "50% AIQ + 50% State Quota via BFUHS"}, {"exam": "NEET PG 2026", "College Name": "Government Medical College, Patiala", "City": "Patiala", "State": "Punjab", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "BFUHS State + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "SMS Medical College, Jaipur", "City": "Jaipur", "State": "Rajasthan", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS/DM/MCh — All specialities including DM Cardiology, Endocrinology, Gastroenterology, MCh Urology, Neurosurgery, Cardiothoracic Surgery", "Who Manages Counselling": "RUHS State + MCC AIQ", "PG Seats (approx)": "~150 PG seats", "Admission Route": "50% AIQ + 50% State Quota via RUHS"}, {"exam": "NEET PG 2026", "College Name": "SN Medical College, Jodhpur", "City": "Jodhpur", "State": "Rajasthan", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "RUHS State + MCC AIQ", "PG Seats (approx)": "~120 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "RNT Medical College, Udaipur", "City": "Udaipur", "State": "Rajasthan", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "RUHS State + MCC AIQ", "PG Seats (approx)": "~100 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "JLN Medical College, Ajmer", "City": "Ajmer", "State": "Rajasthan", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "RUHS State + MCC AIQ", "PG Seats (approx)": "~100 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Madras Medical College, Chennai", "City": "Chennai", "State": "Tamil Nadu", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr | Stipend: ₹55,000–₹65,000/month", "Specializations (PG)": "MD/MS/DM/MCh — All specialities; one of India's largest PG programs (100+ speciality branches)", "Who Manages Counselling": "TNMGRMU State + MCC AIQ", "PG Seats (approx)": "~300 PG seats", "Admission Route": "50% AIQ + 50% TN State Quota via TNMGRMU"}, {"exam": "NEET PG 2026", "College Name": "Coimbatore Medical College", "City": "Coimbatore", "State": "Tamil Nadu", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "TNMGRMU State + MCC AIQ", "PG Seats (approx)": "~120 PG seats", "Admission Route": "50% AIQ + 50% TN State Quota"}, {"exam": "NEET PG 2026", "College Name": "Government Medical College, Madurai", "City": "Madurai", "State": "Tamil Nadu", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "TNMGRMU State + MCC AIQ", "PG Seats (approx)": "~120 PG seats", "Admission Route": "50% AIQ + 50% TN State Quota"}, {"exam": "NEET PG 2026", "College Name": "Tirunelveli Medical College", "City": "Tirunelveli", "State": "Tamil Nadu", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "TNMGRMU State + MCC AIQ", "PG Seats (approx)": "~100 PG seats", "Admission Route": "50% AIQ + 50% TN State Quota"}, {"exam": "NEET PG 2026", "College Name": "Government Medical College, Thanjavur", "City": "Thanjavur", "State": "Tamil Nadu", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "TNMGRMU State + MCC AIQ", "PG Seats (approx)": "~100 PG seats", "Admission Route": "50% AIQ + 50% TN State Quota"}, {"exam": "NEET PG 2026", "College Name": "Stanley Medical College, Chennai", "City": "Chennai", "State": "Tamil Nadu", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "TNMGRMU State + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% TN State Quota"}, {"exam": "NEET PG 2026", "College Name": "Osmania Medical College, Hyderabad", "City": "Hyderabad", "State": "Telangana", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "TSMDC State + MCC AIQ", "PG Seats (approx)": "~120 PG seats", "Admission Route": "50% AIQ + 50% TN State Quota via TSMDC"}, {"exam": "NEET PG 2026", "College Name": "Gandhi Medical College, Hyderabad", "City": "Hyderabad", "State": "Telangana", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "TSMDC State + MCC AIQ", "PG Seats (approx)": "~120 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Kakatiya Medical College, Warangal", "City": "Warangal", "State": "Telangana", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "TSMDC State + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "King George's Medical University (KGMU), Lucknow", "City": "Lucknow", "State": "Uttar Pradesh", "College Type": "State Govt Autonomous", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr | Stipend: ₹60,000–₹75,000/month", "Specializations (PG)": "MD/MS/DM/MCh — All specialities including DM Cardiology, Neurology, Nephrology, Endocrinology, Gastroenterology, Hematology, Medical Oncology; MCh Neurosurgery, Cardiothoracic, Urology, Plastic Surgery, Surgical Oncology, Paediatric Surgery", "Who Manages Counselling": "DMET UP State + MCC AIQ", "PG Seats (approx)": "~350 PG seats (largest PG program in UP)", "Admission Route": "50% AIQ via MCC + 50% UP State Quota via DMET UP"}, {"exam": "NEET PG 2026", "College Name": "IMS BHU, Varanasi", "City": "Varanasi", "State": "Uttar Pradesh", "College Type": "Central University", "Potential PG Fee / Year": "₹20,000–₹50,000/yr", "Specializations (PG)": "MD/MS/DM/MCh — All specialities", "Who Manages Counselling": "MCC AIQ (Central University seats)", "PG Seats (approx)": "~150 PG seats", "Admission Route": "100% via MCC AIQ"}, {"exam": "NEET PG 2026", "College Name": "JNMC AMU, Aligarh", "City": "Aligarh", "State": "Uttar Pradesh", "College Type": "Central Univ — Minority", "Potential PG Fee / Year": "₹20,000–₹50,000/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "MCC AIQ (Central Minority University)", "PG Seats (approx)": "~120 PG seats", "Admission Route": "100% via MCC AIQ"}, {"exam": "NEET PG 2026", "College Name": "Motilal Nehru Medical College, Prayagraj", "City": "Prayagraj", "State": "Uttar Pradesh", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "DMET UP + MCC AIQ", "PG Seats (approx)": "~100 PG seats", "Admission Route": "50% AIQ + 50% UP State Quota"}, {"exam": "NEET PG 2026", "College Name": "BRD Medical College, Gorakhpur", "City": "Gorakhpur", "State": "Uttar Pradesh", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "DMET UP + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% UP State Quota"}, {"exam": "NEET PG 2026", "College Name": "Government Doon Medical College, Dehradun", "City": "Dehradun", "State": "Uttarakhand", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "HNBUMU State + MCC AIQ", "PG Seats (approx)": "~60 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Govt Medical College, Haldwani", "City": "Haldwani", "State": "Uttarakhand", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "HNBUMU State + MCC AIQ", "PG Seats (approx)": "~50 PG seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET PG 2026", "College Name": "Medical College, Kolkata", "City": "Kolkata", "State": "West Bengal", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr | Stipend: ₹50,000–₹65,000/month", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "WBJEE/WBMCC State + MCC AIQ", "PG Seats (approx)": "~120 PG seats", "Admission Route": "50% AIQ + 50% WB State Quota via WBMCC"}, {"exam": "NEET PG 2026", "College Name": "SSKM Hospital / IPGMER, Kolkata", "City": "Kolkata", "State": "West Bengal", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS/DM/MCh — All specialities including DM Cardiology, Haematology, Gastroenterology, MCh Urology, Neurosurgery", "Who Manages Counselling": "WBJEE/WBMCC + MCC AIQ", "PG Seats (approx)": "~150 PG seats", "Admission Route": "50% AIQ + 50% WB State Quota"}, {"exam": "NEET PG 2026", "College Name": "North Bengal Medical College, Siliguri", "City": "Siliguri", "State": "West Bengal", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "WBJEE/WBMCC + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% WB State Quota"}, {"exam": "NEET PG 2026", "College Name": "Burdwan Medical College", "City": "Burdwan", "State": "West Bengal", "College Type": "State Govt", "Potential PG Fee / Year": "₹30,000–₹1 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "WBJEE/WBMCC + MCC AIQ", "PG Seats (approx)": "~80 PG seats", "Admission Route": "50% AIQ + 50% WB State Quota"}, {"exam": "NEET PG 2026", "College Name": "M.S. Ramaiah Medical College", "City": "Bengaluru", "State": "Karnataka", "College Type": "Private (RGUHS)", "Potential PG Fee / Year": "₹5–15 Lakh/yr (P quota) | ₹10–25 Lakh/yr (Q quota) | ₹30–50 Lakh/yr (Management)", "Specializations (PG)": "MD/MS — Medicine, Surgery, Paediatrics, OBG, Orthopaedics, Radiology, Dermatology, Psychiatry, Anaesthesia, ENT, Ophthalmology, Pathology, Microbiology, Community Medicine, Forensic Medicine, Pharmacology, Physiology, Anatomy", "Who Manages Counselling": "KEA PGET (G/P/Q quota) — kea.kar.nic.in", "PG Seats (approx)": "~185 PG seats", "Admission Route": "KEA counselling: G (govt-rate domicile) | P (private domicile) | Q (all India, NRI-rate) | Management quota (college)"}, {"exam": "NEET PG 2026", "College Name": "St. John's Medical College", "City": "Bengaluru", "State": "Karnataka", "College Type": "Private — Minority", "Potential PG Fee / Year": "₹2–12 Lakh/yr (varies by speciality)", "Specializations (PG)": "MD/MS — All major clinical and non-clinical specialities", "Who Manages Counselling": "KEA PGET + MCC (minority quota)", "PG Seats (approx)": "~160 PG seats", "Admission Route": "KEA state quota + Minority institution process"}, {"exam": "NEET PG 2026", "College Name": "Kempegowda Institute of Medical Sciences (KIMS)", "City": "Bengaluru", "State": "Karnataka", "College Type": "Private (RGUHS)", "Potential PG Fee / Year": "₹5–15 Lakh/yr (P quota) | ₹10–25 Lakh/yr (Q quota)", "Specializations (PG)": "MD/MS — Medicine, Surgery, Paediatrics, OBG, Ortho, Radiology, ENT, Ophthalmology, Anaesthesia, Dermatology, Psychiatry, Pathology, Microbiology, Forensic Medicine, Community Medicine", "Who Manages Counselling": "KEA PGET", "PG Seats (approx)": "~155 PG seats", "Admission Route": "KEA G/P/Q quota"}, {"exam": "NEET PG 2026", "College Name": "Father Muller Medical College", "City": "Mangaluru", "State": "Karnataka", "College Type": "Private — Minority", "Potential PG Fee / Year": "₹3–12 Lakh/yr", "Specializations (PG)": "MD/MS — Major clinical and non-clinical specialities", "Who Manages Counselling": "KEA PGET", "PG Seats (approx)": "~110 PG seats", "Admission Route": "KEA G/P/Q quota"}, {"exam": "NEET PG 2026", "College Name": "Vydehi Institute of Medical Sciences & Research Centre", "City": "Bengaluru", "State": "Karnataka", "College Type": "Private (RGUHS)", "Potential PG Fee / Year": "₹5–15 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "KEA PGET", "PG Seats (approx)": "~120 PG seats", "Admission Route": "KEA G/P/Q quota"}, {"exam": "NEET PG 2026", "College Name": "Mahadevappa Rampure Medical College (MRMC)", "City": "Kalaburagi", "State": "Karnataka", "College Type": "Private (RGUHS)", "Potential PG Fee / Year": "₹5–15 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "KEA PGET", "PG Seats (approx)": "~130 PG seats", "Admission Route": "KEA G/P/Q quota"}, {"exam": "NEET PG 2026", "College Name": "JJM Medical College", "City": "Davanagere", "State": "Karnataka", "College Type": "Private (RGUHS)", "Potential PG Fee / Year": "₹5–15 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "KEA PGET", "PG Seats (approx)": "~130 PG seats", "Admission Route": "KEA G/P/Q quota"}, {"exam": "NEET PG 2026", "College Name": "A.J. Institute of Medical Sciences, Mangaluru", "City": "Mangaluru", "State": "Karnataka", "College Type": "Private (RGUHS)", "Potential PG Fee / Year": "₹5–15 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "KEA PGET", "PG Seats (approx)": "~100 PG seats", "Admission Route": "KEA G/P/Q quota"}, {"exam": "NEET PG 2026", "College Name": "Rajarajeswari Medical College & Hospital", "City": "Bengaluru", "State": "Karnataka", "College Type": "Private (RGUHS)", "Potential PG Fee / Year": "₹5–15 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "KEA PGET", "PG Seats (approx)": "~110 PG seats", "Admission Route": "KEA G/P/Q quota"}, {"exam": "NEET PG 2026", "College Name": "BGS Global Institute of Medical Sciences", "City": "Bengaluru", "State": "Karnataka", "College Type": "Private (RGUHS)", "Potential PG Fee / Year": "₹5–15 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "KEA PGET", "PG Seats (approx)": "~100 PG seats", "Admission Route": "KEA G/P/Q quota"}, {"exam": "NEET PG 2026", "College Name": "Kasturba Medical College, Manipal (KMC Manipal)", "City": "Manipal (Udupi)", "State": "Karnataka", "College Type": "Deemed — MAHE", "Potential PG Fee / Year": "₹8–25 Lakh/yr (regular) | ₹40–80 Lakh/yr (NRI/Management)", "Specializations (PG)": "MD/MS/DM/MCh — All specialities including DM Cardiology, DM Neurology, DM Nephrology, MCh Neurosurgery, MCh Urology, MCh Cardiothoracic, MCh Plastic Surgery + MDS all branches", "Who Manages Counselling": "MCC Centralised Counselling (mcc.nic.in) — 100% deemed seats", "PG Seats (approx)": "~320 PG seats", "Admission Route": "100% via MCC centralised deemed counselling — open to all India candidates"}, {"exam": "NEET PG 2026", "College Name": "Kasturba Medical College, Mangalore (KMC Mangalore)", "City": "Mangaluru", "State": "Karnataka", "College Type": "Deemed — MAHE", "Potential PG Fee / Year": "₹8–20 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities + selected DM branches", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~240 PG seats", "Admission Route": "100% via MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "JSS Medical College, Mysuru", "City": "Mysuru", "State": "Karnataka", "College Type": "Deemed — JSS AHER", "Potential PG Fee / Year": "₹5–18 Lakh/yr", "Specializations (PG)": "MD/MS/DM — Major specialities + DM Cardiology, DM Neurology", "Who Manages Counselling": "MCC Centralised Counselling + KEA (some seats)", "PG Seats (approx)": "~200 PG seats", "Admission Route": "MCC deemed counselling (100% deemed seats)"}, {"exam": "NEET PG 2026", "College Name": "JNMC, Belagavi (KLE University)", "City": "Belagavi", "State": "Karnataka", "College Type": "Deemed — KLE", "Potential PG Fee / Year": "₹5–18 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "MCC Centralised Counselling + KEA", "PG Seats (approx)": "~200 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "SBMPMC (BLDE), Vijayapura", "City": "Vijayapura", "State": "Karnataka", "College Type": "Deemed — BLDE", "Potential PG Fee / Year": "₹5–15 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "MCC Centralised Counselling + KEA", "PG Seats (approx)": "~150 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "SDM College of Medical Sciences, Dharwad", "City": "Dharwad", "State": "Karnataka", "College Type": "Deemed — SDM", "Potential PG Fee / Year": "₹5–15 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "MCC Centralised Counselling + KEA", "PG Seats (approx)": "~120 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "Yenepoya Medical College, Mangaluru", "City": "Mangaluru", "State": "Karnataka", "College Type": "Deemed — Yenepoya", "Potential PG Fee / Year": "₹6–18 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~130 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "K.S. Hegde Medical Academy (KSHEMA)", "City": "Mangaluru", "State": "Karnataka", "College Type": "Deemed — Nitte", "Potential PG Fee / Year": "₹8–20 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~130 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "Sri Ramachandra Institute of Higher Education, Chennai", "City": "Chennai", "State": "Tamil Nadu", "College Type": "Deemed", "Potential PG Fee / Year": "₹14–20 Lakh/yr (regular) | ₹50–80 Lakh/yr (NRI)", "Specializations (PG)": "MD/MS/DM/MCh — All specialities including DM Cardiology, Neurology, MCh Neurosurgery, Cardiac Surgery, Urology, Plastic Surgery", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~250 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "Christian Medical College (CMC), Vellore", "City": "Vellore", "State": "Tamil Nadu", "College Type": "Deemed — Minority", "Potential PG Fee / Year": "₹2–5 Lakh/yr (subsidised for most; higher for management/NRI)", "Specializations (PG)": "MD/MS/DM/MCh — All specialities + rare specialities like Clinical Haematology, Peripheral Vascular Surgery, Transfusion Medicine, Medical Genetics", "Who Manages Counselling": "MCC + CMC institutional process", "PG Seats (approx)": "~280 PG seats", "Admission Route": "NEET PG score + CMC institutional selection process + MCC counselling"}, {"exam": "NEET PG 2026", "College Name": "SRM Medical College, Kattankulathur", "City": "Kattankulathur / Chennai", "State": "Tamil Nadu", "College Type": "Deemed (SRM-IST)", "Potential PG Fee / Year": "₹14–20 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~180 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "Saveetha Medical College, Chennai", "City": "Chennai", "State": "Tamil Nadu", "College Type": "Deemed", "Potential PG Fee / Year": "₹14–20 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~150 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "Amrita Institute of Medical Sciences, Kochi", "City": "Kochi", "State": "Kerala", "College Type": "Deemed (Amrita)", "Potential PG Fee / Year": "₹14–22 Lakh/yr (regular) | ₹50–80 Lakh/yr (NRI)", "Specializations (PG)": "MD/MS/DM/MCh — All specialities including DM Cardiology, Neurology, Nephrology, Gastroenterology, Pulmonology, MCh Cardiothoracic, Neurosurgery, Urology, Plastic Surgery", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~250 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "DY Patil Medical College, Pune", "City": "Pune", "State": "Maharashtra", "College Type": "Deemed", "Potential PG Fee / Year": "₹16–22 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "MCC Centralised Counselling + CET Cell MH (some)", "PG Seats (approx)": "~150 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "Bharati Vidyapeeth Medical College, Pune", "City": "Pune", "State": "Maharashtra", "College Type": "Deemed", "Potential PG Fee / Year": "₹12–18 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~150 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "Datta Meghe Institute of Medical Sciences, Wardha", "City": "Wardha", "State": "Maharashtra", "College Type": "Deemed", "Potential PG Fee / Year": "₹10–14 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~120 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "Krishna Institute of Medical Sciences, Karad", "City": "Karad / Satara", "State": "Maharashtra", "College Type": "Deemed", "Potential PG Fee / Year": "₹10–14 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~100 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "SBKS Medical Institute (Sumandeep), Vadodara", "City": "Vadodara", "State": "Gujarat", "College Type": "Deemed", "Potential PG Fee / Year": "₹10–14 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~100 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "Pramukhswami Medical College, Karamsad", "City": "Karamsad / Anand", "State": "Gujarat", "College Type": "Deemed (HMHN)", "Potential PG Fee / Year": "₹10–15 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~80 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "Hamdard Institute of Medical Sciences (HIMSR)", "City": "New Delhi", "State": "Delhi", "College Type": "Deemed — Minority", "Potential PG Fee / Year": "₹12–18 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~80 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "Christian Medical College (CMC), Ludhiana", "City": "Ludhiana", "State": "Punjab", "College Type": "Private — Minority", "Potential PG Fee / Year": "₹5–10 Lakh/yr", "Specializations (PG)": "MD/MS — All major specialities; noted for Clinical Haematology, Nephrology, Cardiology", "Who Manages Counselling": "BFUHS State + MCC (minority)", "PG Seats (approx)": "~100 PG seats", "Admission Route": "BFUHS state counselling + MCC AIQ"}, {"exam": "NEET PG 2026", "College Name": "MM Medical College, Ambala (MMIMSR)", "City": "Ambala (Mullana)", "State": "Haryana", "College Type": "Deemed", "Potential PG Fee / Year": "₹10–14 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~80 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "IMS & SUM Hospital, Bhubaneswar (SOA Univ)", "City": "Bhubaneswar", "State": "Odisha", "College Type": "Deemed (SOA)", "Potential PG Fee / Year": "₹12–18 Lakh/yr", "Specializations (PG)": "MD/MS/DM/MCh — All specialities including DM Cardiology, Neurology, MCh Neurosurgery, Urology", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~200 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "KIMS (Kalinga), Bhubaneswar (KIIT)", "City": "Bhubaneswar", "State": "Odisha", "College Type": "Deemed (KIIT)", "Potential PG Fee / Year": "₹14–20 Lakh/yr", "Specializations (PG)": "MD/MS/DM/MCh — All specialities", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~180 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "Santosh Medical College, Ghaziabad", "City": "Ghaziabad", "State": "Uttar Pradesh", "College Type": "Deemed", "Potential PG Fee / Year": "₹10–14 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~80 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET PG 2026", "College Name": "Era Medical College, Lucknow", "City": "Lucknow", "State": "Uttar Pradesh", "College Type": "Deemed — Minority", "Potential PG Fee / Year": "₹10–14 Lakh/yr", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~80 PG seats", "Admission Route": "MCC deemed counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "AIIMS New Delhi", "City": "New Delhi", "State": "Delhi", "College Type": "AIIMS — Central Govt", "Potential PG Fee / Year": "Govt rates — ₹1,000–₹5,000/yr (nominal) | Stipend: ₹80,000–₹1,00,000/month", "Specializations (PG)": "MD/MS/DM/MCh/MDS — All specialities including DM Cardiology, Neurology, Nephrology, Gastroenterology, Endocrinology, Hematology, Medical Oncology, Pulmonology; MCh Neurosurgery, Cardiothoracic Surgery, Urology, Plastic Surgery, Paediatric Surgery, Vascular Surgery + MD Hospital Administration", "Who Manages Counselling": "AIIMS Centralised Counselling (aiimsexams.ac.in) — 4 rounds", "PG Seats (approx)": "~250 PG seats", "Admission Route": "INI-CET merit list → AIIMS centralised counselling (NOT MCC / NOT KEA)"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "AIIMS Bhopal", "City": "Bhopal", "State": "Madhya Pradesh", "College Type": "AIIMS — Central Govt", "Potential PG Fee / Year": "Govt rates — ₹1,000–₹5,000/yr | Stipend: ₹75,000–₹90,000/month", "Specializations (PG)": "MD/MS — Most major specialities (Medicine, Surgery, Paeds, OBG, Ortho, Radiology, Psychiatry, Anaesthesia, ENT, Ophthalmology, Pathology, Microbiology, Community Medicine, others)", "Who Manages Counselling": "AIIMS Centralised Counselling", "PG Seats (approx)": "~90 PG seats", "Admission Route": "INI-CET merit → AIIMS counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "AIIMS Bhubaneswar", "City": "Bhubaneswar", "State": "Odisha", "College Type": "AIIMS — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹75,000–₹90,000/month", "Specializations (PG)": "MD/MS — Most major specialities", "Who Manages Counselling": "AIIMS Centralised Counselling", "PG Seats (approx)": "~90 PG seats", "Admission Route": "INI-CET merit → AIIMS counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "AIIMS Jodhpur", "City": "Jodhpur", "State": "Rajasthan", "College Type": "AIIMS — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹75,000–₹90,000/month", "Specializations (PG)": "MD/MS — Most major specialities", "Who Manages Counselling": "AIIMS Centralised Counselling", "PG Seats (approx)": "~90 PG seats", "Admission Route": "INI-CET merit → AIIMS counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "AIIMS Patna", "City": "Patna", "State": "Bihar", "College Type": "AIIMS — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹75,000–₹90,000/month", "Specializations (PG)": "MD/MS — Most major specialities", "Who Manages Counselling": "AIIMS Centralised Counselling", "PG Seats (approx)": "~90 PG seats", "Admission Route": "INI-CET merit → AIIMS counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "AIIMS Raipur", "City": "Raipur", "State": "Chhattisgarh", "College Type": "AIIMS — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹75,000–₹90,000/month", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "AIIMS Centralised Counselling", "PG Seats (approx)": "~90 PG seats", "Admission Route": "INI-CET merit → AIIMS counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "AIIMS Rishikesh", "City": "Rishikesh", "State": "Uttarakhand", "College Type": "AIIMS — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹75,000–₹90,000/month", "Specializations (PG)": "MD/MS — Major specialities + selected DM", "Who Manages Counselling": "AIIMS Centralised Counselling", "PG Seats (approx)": "~120 PG seats", "Admission Route": "INI-CET merit → AIIMS counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "AIIMS Nagpur", "City": "Nagpur", "State": "Maharashtra", "College Type": "AIIMS — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹70,000–₹85,000/month", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "AIIMS Centralised Counselling", "PG Seats (approx)": "~60 PG seats", "Admission Route": "INI-CET merit → AIIMS counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "AIIMS Mangalagiri (Vijayawada)", "City": "Mangalagiri", "State": "Andhra Pradesh", "College Type": "AIIMS — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹70,000–₹85,000/month", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "AIIMS Centralised Counselling", "PG Seats (approx)": "~60 PG seats", "Admission Route": "INI-CET merit → AIIMS counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "AIIMS Gorakhpur", "City": "Gorakhpur", "State": "Uttar Pradesh", "College Type": "AIIMS — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹70,000–₹85,000/month", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "AIIMS Centralised Counselling", "PG Seats (approx)": "~60 PG seats", "Admission Route": "INI-CET merit → AIIMS counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "AIIMS Bathinda", "City": "Bathinda", "State": "Punjab", "College Type": "AIIMS — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹70,000–₹85,000/month", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "AIIMS Centralised Counselling", "PG Seats (approx)": "~50 PG seats", "Admission Route": "INI-CET merit → AIIMS counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "AIIMS Bilaspur (Himachal Pradesh)", "City": "Bilaspur", "State": "Himachal Pradesh", "College Type": "AIIMS — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹70,000–₹85,000/month", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "AIIMS Centralised Counselling", "PG Seats (approx)": "~50 PG seats", "Admission Route": "INI-CET merit → AIIMS counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "AIIMS Deoghar", "City": "Deoghar", "State": "Jharkhand", "College Type": "AIIMS — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹70,000–₹85,000/month", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "AIIMS Centralised Counselling", "PG Seats (approx)": "~50 PG seats", "Admission Route": "INI-CET merit → AIIMS counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "AIIMS Guwahati", "City": "Guwahati", "State": "Assam", "College Type": "AIIMS — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹70,000–₹85,000/month", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "AIIMS Centralised Counselling", "PG Seats (approx)": "~50 PG seats", "Admission Route": "INI-CET merit → AIIMS counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "AIIMS Kalyani", "City": "Kalyani", "State": "West Bengal", "College Type": "AIIMS — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹70,000–₹85,000/month", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "AIIMS Centralised Counselling", "PG Seats (approx)": "~50 PG seats", "Admission Route": "INI-CET merit → AIIMS counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "AIIMS Rajkot", "City": "Rajkot", "State": "Gujarat", "College Type": "AIIMS — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹70,000–₹85,000/month", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "AIIMS Centralised Counselling", "PG Seats (approx)": "~40 PG seats", "Admission Route": "INI-CET merit → AIIMS counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "AIIMS Vijaypur (Jammu)", "City": "Vijaypur", "State": "J&K", "College Type": "AIIMS — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹70,000–₹85,000/month", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "AIIMS Centralised Counselling", "PG Seats (approx)": "~40 PG seats", "Admission Route": "INI-CET merit → AIIMS counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "AIIMS Bibinagar (Telangana)", "City": "Bibinagar", "State": "Telangana", "College Type": "AIIMS — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹70,000–₹85,000/month", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "AIIMS Centralised Counselling", "PG Seats (approx)": "~40 PG seats", "Admission Route": "INI-CET merit → AIIMS counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "AIIMS Imphal (Manipur)", "City": "Imphal", "State": "Manipur", "College Type": "AIIMS — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹70,000–₹85,000/month", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "AIIMS Centralised Counselling", "PG Seats (approx)": "~30 PG seats", "Admission Route": "INI-CET merit → AIIMS counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "AIIMS Madurai (Tamil Nadu)", "City": "Madurai", "State": "Tamil Nadu", "College Type": "AIIMS — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹70,000–₹85,000/month", "Specializations (PG)": "MD/MS — Major specialities (expanding)", "Who Manages Counselling": "AIIMS Centralised Counselling", "PG Seats (approx)": "~30 PG seats", "Admission Route": "INI-CET merit → AIIMS counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "JIPMER Puducherry", "City": "Puducherry", "State": "Puducherry", "College Type": "INI — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹80,000–₹1,00,000/month", "Specializations (PG)": "MD/MS/DM/MCh — All specialities including DM Cardiology, Neurology, MCh Cardiothoracic, Neurosurgery, Urology, Plastic Surgery + MD Hospital Administration + MDS all branches", "Who Manages Counselling": "AIIMS Centralised Counselling (JIPMER participates)", "PG Seats (approx)": "~200 PG seats", "Admission Route": "INI-CET merit → AIIMS INI-CET centralised counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "JIPMER Karaikal", "City": "Karaikal", "State": "Puducherry", "College Type": "INI — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹75,000–₹90,000/month", "Specializations (PG)": "MD/MS — Major specialities", "Who Manages Counselling": "AIIMS Centralised Counselling", "PG Seats (approx)": "~30 PG seats", "Admission Route": "INI-CET merit → AIIMS INI-CET counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "PGIMER Chandigarh", "City": "Chandigarh", "State": "Chandigarh", "College Type": "INI — Central Govt", "Potential PG Fee / Year": "Govt rates — ₹1,000–₹5,000/yr | Stipend: ₹80,000–₹1,10,000/month", "Specializations (PG)": "MD/MS/DM/MCh — All specialities including DM Cardiology, Haematology, Nephrology, Gastroenterology, Endocrinology, Pulmonology; MCh Neurosurgery, Cardiothoracic, Plastic Surgery, Urology + specialties like Transfusion Medicine, Hospital Administration", "Who Manages Counselling": "AIIMS Centralised Counselling (PGIMER participates)", "PG Seats (approx)": "~300 PG seats", "Admission Route": "INI-CET merit → AIIMS INI-CET centralised counselling"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "NIMHANS Bengaluru", "City": "Bengaluru", "State": "Karnataka", "College Type": "INI — Central Govt", "Potential PG Fee / Year": "Govt rates — subsidised | Stipend: ₹75,000–₹95,000/month", "Specializations (PG)": "MD Psychiatry | MD Neurology | MD Neuroradiology | MSc Neuroscience | DM Neurology | MCh Neurosurgery | PhD — all Neuroscience and Mental Health specialities", "Who Manages Counselling": "AIIMS Centralised Counselling (NIMHANS participates)", "PG Seats (approx)": "~120 PG seats", "Admission Route": "INI-CET merit → AIIMS INI-CET centralised counselling — only for neuroscience & psychiatric specialities"}, {"exam": "INI-CET July 2026 (for July session)", "College Name": "SCTIMST Thiruvananthapuram", "City": "Thiruvananthapuram", "State": "Kerala", "College Type": "INI — Central Govt", "Potential PG Fee / Year": "Govt rates | Stipend: ₹75,000–₹90,000/month", "Specializations (PG)": "DM Cardiology | DM Neurology | MCh Cardiothoracic Surgery | MCh Neurosurgery | MCh Vascular Surgery | Biomedical Technology (M.Sc/PhD)", "Who Manages Counselling": "AIIMS Centralised Counselling (SCTIMST participates)", "PG Seats (approx)": "~60 PG seats", "Admission Route": "INI-CET merit → AIIMS INI-CET centralised counselling — cardiac and neuro specialities only"}, {"exam": "NEET MDS 2026", "College Name": "Maulana Azad Institute of Dental Sciences, New Delhi", "City": "New Delhi", "State": "Delhi", "College Type": "Central Govt", "Potential PG Fee / Year": "₹20,000–₹50,000/yr (Govt rates)", "Specializations (PG)": "MDS — Orthodontics, Oral Surgery, Prosthodontics, Periodontics, Pedodontics, Conservative Dentistry, Oral Medicine, Oral Pathology, Public Health Dentistry", "Who Manages Counselling": "MCC AIQ + Delhi State", "PG Seats (approx)": "~80 MDS seats", "Admission Route": "100% via MCC AIQ (Central college)"}, {"exam": "NEET MDS 2026", "College Name": "Government Dental College, Bangalore", "City": "Bengaluru", "State": "Karnataka", "College Type": "State Govt", "Potential PG Fee / Year": "₹50,000–₹1 Lakh/yr", "Specializations (PG)": "MDS — All 9 branches", "Who Manages Counselling": "KEA State Dental Counselling + MCC AIQ", "PG Seats (approx)": "~50 MDS seats", "Admission Route": "50% AIQ + 50% KEA State Quota"}, {"exam": "NEET MDS 2026", "College Name": "Government Dental College, Calicut", "City": "Kozhikode", "State": "Kerala", "College Type": "State Govt", "Potential PG Fee / Year": "₹50,000–₹1 Lakh/yr", "Specializations (PG)": "MDS — All major branches", "Who Manages Counselling": "KUHS State + MCC AIQ", "PG Seats (approx)": "~40 MDS seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET MDS 2026", "College Name": "Government Dental College, Trivandrum", "City": "Thiruvananthapuram", "State": "Kerala", "College Type": "State Govt", "Potential PG Fee / Year": "₹50,000–₹1 Lakh/yr", "Specializations (PG)": "MDS — All major branches", "Who Manages Counselling": "KUHS State + MCC AIQ", "PG Seats (approx)": "~40 MDS seats", "Admission Route": "50% AIQ + 50% State Quota"}, {"exam": "NEET MDS 2026", "College Name": "Manipal College of Dental Sciences, Manipal (MCODS)", "City": "Manipal (Udupi)", "State": "Karnataka", "College Type": "Deemed — MAHE", "Potential PG Fee / Year": "₹8–20 Lakh/yr (MDS)", "Specializations (PG)": "MDS — All 9 branches: Orthodontics, Oral Surgery, Prosthodontics, Periodontics, Pedodontics, Conservative Dentistry, Oral Medicine, Oral Pathology, Public Health Dentistry", "Who Manages Counselling": "MCC Centralised Counselling (deemed)", "PG Seats (approx)": "~60 MDS seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET MDS 2026", "College Name": "Manipal College of Dental Sciences, Mangalore", "City": "Mangaluru", "State": "Karnataka", "College Type": "Deemed — MAHE", "Potential PG Fee / Year": "₹8–18 Lakh/yr", "Specializations (PG)": "MDS — All 9 branches", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~50 MDS seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET MDS 2026", "College Name": "SDM College of Dental Sciences, Dharwad", "City": "Dharwad", "State": "Karnataka", "College Type": "Deemed — SDM", "Potential PG Fee / Year": "₹5–12 Lakh/yr", "Specializations (PG)": "MDS — All 9 branches", "Who Manages Counselling": "MCC Centralised Counselling + KEA", "PG Seats (approx)": "~45 MDS seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET MDS 2026", "College Name": "A.B. Shetty Memorial Institute of Dental Sciences (ABSMIDS), Mangaluru", "City": "Mangaluru", "State": "Karnataka", "College Type": "Deemed — Nitte", "Potential PG Fee / Year": "₹8–18 Lakh/yr", "Specializations (PG)": "MDS — All 9 branches", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~45 MDS seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET MDS 2026", "College Name": "Sri Ramachandra Institute, Chennai (Dental)", "City": "Chennai", "State": "Tamil Nadu", "College Type": "Deemed", "Potential PG Fee / Year": "₹12–20 Lakh/yr", "Specializations (PG)": "MDS — All 9 branches", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~45 MDS seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET MDS 2026", "College Name": "Amrita School of Dentistry, Kochi", "City": "Kochi", "State": "Kerala", "College Type": "Deemed (Amrita)", "Potential PG Fee / Year": "₹10–18 Lakh/yr", "Specializations (PG)": "MDS — All 9 branches", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~45 MDS seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET MDS 2026", "College Name": "JSS Dental College, Mysuru", "City": "Mysuru", "State": "Karnataka", "College Type": "Deemed — JSS", "Potential PG Fee / Year": "₹5–12 Lakh/yr", "Specializations (PG)": "MDS — All 9 branches", "Who Manages Counselling": "MCC Centralised Counselling + KEA", "PG Seats (approx)": "~40 MDS seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET MDS 2026", "College Name": "SRM Kattankulathur Dental College, Chennai", "City": "Kattankulathur", "State": "Tamil Nadu", "College Type": "Deemed", "Potential PG Fee / Year": "₹10–18 Lakh/yr", "Specializations (PG)": "MDS — All 9 branches", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~45 MDS seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET MDS 2026", "College Name": "Saveetha Dental College, Chennai", "City": "Chennai", "State": "Tamil Nadu", "College Type": "Deemed", "Potential PG Fee / Year": "₹10–18 Lakh/yr", "Specializations (PG)": "MDS — All 9 branches", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~45 MDS seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET MDS 2026", "College Name": "Christian Dental College, CMC Ludhiana", "City": "Ludhiana", "State": "Punjab", "College Type": "Private — Minority", "Potential PG Fee / Year": "₹4–10 Lakh/yr", "Specializations (PG)": "MDS — All 9 branches", "Who Manages Counselling": "BFUHS State + MCC (minority)", "PG Seats (approx)": "~30 MDS seats", "Admission Route": "State counselling + MCC AIQ"}, {"exam": "NEET MDS 2026", "College Name": "Dr. D.Y. Patil Dental College, Pune", "City": "Pune", "State": "Maharashtra", "College Type": "Deemed", "Potential PG Fee / Year": "₹10–18 Lakh/yr", "Specializations (PG)": "MDS — All 9 branches", "Who Manages Counselling": "MCC Centralised Counselling", "PG Seats (approx)": "~40 MDS seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET SS 2026", "College Name": "KGMU, Lucknow — Super Speciality", "City": "Lucknow", "State": "Uttar Pradesh", "College Type": "State Govt", "Potential PG Fee / Year": "₹50,000–₹2 Lakh/yr | Stipend: ₹80,000–₹1,00,000/month", "Specializations (PG)": "DM — Cardiology, Neurology, Nephrology, Gastroenterology, Endocrinology, Hematology, Medical Oncology; MCh — Cardiothoracic Surgery, Neurosurgery, Urology, Plastic Surgery, Paediatric Surgery, Surgical Oncology, Vascular Surgery", "Who Manages Counselling": "MCC AIQ + DMET UP State Quota", "PG Seats (approx)": "~60 DM/MCh seats", "Admission Route": "50% AIQ via MCC + 50% UP State Quota via DMET UP | NEET SS is the mandatory entrance exam"}, {"exam": "NEET SS 2026", "College Name": "Madras Medical College — Super Speciality", "City": "Chennai", "State": "Tamil Nadu", "College Type": "State Govt", "Potential PG Fee / Year": "₹50,000–₹2 Lakh/yr | Stipend: ₹75,000–₹90,000/month", "Specializations (PG)": "DM — Cardiology, Neurology, Nephrology, Gastroenterology, Haematology; MCh — Cardiothoracic, Neurosurgery, Urology, Plastic Surgery", "Who Manages Counselling": "MCC AIQ + TNMGRMU State", "PG Seats (approx)": "~50 DM/MCh seats", "Admission Route": "50% AIQ + 50% TN State Quota"}, {"exam": "NEET SS 2026", "College Name": "SMS Medical College, Jaipur — Super Speciality", "City": "Jaipur", "State": "Rajasthan", "College Type": "State Govt", "Potential PG Fee / Year": "₹50,000–₹2 Lakh/yr | Stipend: ₹75,000–₹90,000/month", "Specializations (PG)": "DM — Cardiology, Neurology, Nephrology, Gastroenterology, Endocrinology; MCh — Urology, Neurosurgery, Cardiothoracic Surgery", "Who Manages Counselling": "MCC AIQ + RUHS State", "PG Seats (approx)": "~40 DM/MCh seats", "Admission Route": "50% AIQ + 50% Rajasthan State Quota"}, {"exam": "NEET SS 2026", "College Name": "VMMC & Safdarjung Hospital, Delhi — Super Speciality", "City": "New Delhi", "State": "Delhi", "College Type": "Central Govt", "Potential PG Fee / Year": "₹50,000–₹2 Lakh/yr | Stipend: ₹80,000–₹95,000/month", "Specializations (PG)": "DM — Cardiology, Neurology, Pulmonology, Haematology, Gastroenterology, Nephrology; MCh — Cardiothoracic, Neurosurgery, Urology", "Who Manages Counselling": "MCC AIQ (Central college)", "PG Seats (approx)": "~50 DM/MCh seats", "Admission Route": "100% via MCC AIQ"}, {"exam": "NEET SS 2026", "College Name": "SSKM / IPGMER, Kolkata — Super Speciality", "City": "Kolkata", "State": "West Bengal", "College Type": "State Govt", "Potential PG Fee / Year": "₹50,000–₹2 Lakh/yr | Stipend: ₹70,000–₹85,000/month", "Specializations (PG)": "DM — Cardiology, Neurology, Nephrology, Haematology, Gastroenterology; MCh — Cardiothoracic, Neurosurgery, Urology, Plastic Surgery", "Who Manages Counselling": "MCC AIQ + WBMCC State", "PG Seats (approx)": "~40 DM/MCh seats", "Admission Route": "50% AIQ + 50% WB State Quota"}, {"exam": "NEET SS 2026", "College Name": "Gandhi Medical College, Hyderabad — Super Speciality", "City": "Hyderabad", "State": "Telangana", "College Type": "State Govt", "Potential PG Fee / Year": "₹50,000–₹2 Lakh/yr", "Specializations (PG)": "DM — Cardiology, Neurology, Nephrology, Gastroenterology; MCh — Neurosurgery, Urology, Cardiothoracic", "Who Manages Counselling": "MCC AIQ + TSMDC State", "PG Seats (approx)": "~35 DM/MCh seats", "Admission Route": "50% AIQ + 50% Telangana State Quota"}, {"exam": "NEET SS 2026", "College Name": "Sri Ramachandra Institute, Chennai — Super Speciality", "City": "Chennai", "State": "Tamil Nadu", "College Type": "Deemed", "Potential PG Fee / Year": "₹5–15 Lakh/yr (DM/MCh)", "Specializations (PG)": "DM — Cardiology, Neurology, Nephrology, Gastroenterology; MCh — Cardiothoracic, Neurosurgery, Urology, Plastic Surgery", "Who Manages Counselling": "MCC AIQ (deemed) + TNMGRMU", "PG Seats (approx)": "~50 DM/MCh seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET SS 2026", "College Name": "Amrita Institute of Medical Sciences, Kochi — Super Speciality", "City": "Kochi", "State": "Kerala", "College Type": "Deemed", "Potential PG Fee / Year": "₹5–15 Lakh/yr", "Specializations (PG)": "DM — Cardiology, Neurology, Nephrology, Gastroenterology, Pulmonology; MCh — Cardiothoracic, Neurosurgery, Urology, Plastic Surgery", "Who Manages Counselling": "MCC AIQ (deemed)", "PG Seats (approx)": "~50 DM/MCh seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET SS 2026", "College Name": "KMC Manipal — Super Speciality", "City": "Manipal", "State": "Karnataka", "College Type": "Deemed", "Potential PG Fee / Year": "₹5–15 Lakh/yr", "Specializations (PG)": "DM — Cardiology, Neurology, Nephrology, Gastroenterology; MCh — Cardiothoracic, Neurosurgery, Urology, Plastic Surgery", "Who Manages Counselling": "MCC AIQ (deemed)", "PG Seats (approx)": "~50 DM/MCh seats", "Admission Route": "MCC deemed counselling — NOT under KEA for SS"}, {"exam": "NEET SS 2026", "College Name": "BJ Medical College, Pune — Super Speciality", "City": "Pune", "State": "Maharashtra", "College Type": "State Govt", "Potential PG Fee / Year": "₹50,000–₹2 Lakh/yr", "Specializations (PG)": "DM — Cardiology, Neurology, Nephrology; MCh — Cardiothoracic, Neurosurgery", "Who Manages Counselling": "MCC AIQ + CET Cell Maharashtra", "PG Seats (approx)": "~30 DM/MCh seats", "Admission Route": "50% AIQ + 50% Maharashtra State Quota"}, {"exam": "NEET SS 2026", "College Name": "Government Medical College, Thiruvananthapuram — Super Speciality", "City": "Thiruvananthapuram", "State": "Kerala", "College Type": "State Govt", "Potential PG Fee / Year": "₹50,000–₹2 Lakh/yr | Stipend: ₹75,000–₹90,000/month", "Specializations (PG)": "DM — Cardiology, Neurology, Nephrology, Gastroenterology, Pulmonology, Haematology; MCh — Cardiothoracic, Neurosurgery, Urology, Plastic Surgery, Paediatric Surgery", "Who Manages Counselling": "MCC AIQ + KUHS Kerala State", "PG Seats (approx)": "~45 DM/MCh seats", "Admission Route": "50% AIQ + 50% Kerala State Quota"}, {"exam": "NEET SS 2026", "College Name": "IMS & SUM Hospital, Bhubaneswar — Super Speciality", "City": "Bhubaneswar", "State": "Odisha", "College Type": "Deemed", "Potential PG Fee / Year": "₹5–15 Lakh/yr", "Specializations (PG)": "DM — Cardiology, Neurology, Nephrology, Gastroenterology; MCh — Cardiothoracic, Neurosurgery", "Who Manages Counselling": "MCC AIQ (deemed)", "PG Seats (approx)": "~30 DM/MCh seats", "Admission Route": "MCC deemed counselling"}, {"exam": "NEET SS 2026", "College Name": "KIMS Bhubaneswar (KIIT) — Super Speciality", "City": "Bhubaneswar", "State": "Odisha", "College Type": "Deemed", "Potential PG Fee / Year": "₹5–15 Lakh/yr", "Specializations (PG)": "DM — Cardiology, Neurology; MCh — Cardiothoracic, Neurosurgery, Urology", "Who Manages Counselling": "MCC AIQ (deemed)", "PG Seats (approx)": "~30 DM/MCh seats", "Admission Route": "MCC deemed counselling"}];
+const CN_TYPES = ["AIIMS \u2014 Central Govt", "INI \u2014 Central Govt", "Central Govt", "Central Govt (Women)", "Central Govt \u2014 ESIC", "Central Univ \u2014 Minority", "Central University"];
+const GOV_TYPES = ["State Govt", "State Govt Autonomous", "State Govt (INI-type)", "State Govt (Municipal)"];
+const PVT_TYPES = ["Private (RGUHS)", "Private \u2014 Minority", "Private", "Private (NIMS Univ)"];
+const DEEMED_TYPES = ["Deemed", "Deemed (Amrita)", "Deemed (HMHN)", "Deemed (KIIT)", "Deemed (SOA)", "Deemed (SRM-IST)", "Deemed \u2014 BLDE", "Deemed \u2014 JSS", "Deemed \u2014 JSS AHER", "Deemed \u2014 KLE", "Deemed \u2014 MAHE", "Deemed \u2014 Minority", "Deemed \u2014 Nitte", "Deemed \u2014 SDM", "Deemed \u2014 Yenepoya"];
+
+const DS = {
+  MD:{label:'MD',cls:'b-green',groups:[
+    {n:'Clinical',items:['General Medicine','Paediatrics','Dermatology, Venereology & Leprosy (DVL)','Radio-Diagnosis (Radiology)','Anaesthesiology','Obstetrics & Gynaecology','Psychiatry','Respiratory Medicine / Pulmonary Medicine','Emergency Medicine','Physical Medicine & Rehabilitation (PMR)','Geriatrics','Sports Medicine','Tropical Medicine','Nuclear Medicine','Radiotherapy / Radiation Oncology','Ophthalmology','Otorhinolaryngology (ENT)','Hospital Administration','Palliative Medicine','Occupational & Environmental Medicine','Aviation Medicine','Social Medicine','Immuno-haematology & Blood Transfusion']},
+    {n:'Para-clinical',items:['Pathology','Microbiology & Immunology','Pharmacology','Forensic Medicine & Toxicology','Community Medicine / PSM','Transfusion Medicine']},
+    {n:'Pre-clinical',items:['Anatomy','Physiology','Biochemistry']}
+  ]},
+  MS:{label:'MS',cls:'b-blue',groups:[
+    {n:'Surgical',items:['General Surgery','Orthopaedics','Ophthalmology','Otorhinolaryngology (ENT)','Obstetrics & Gynaecology','Anatomy','Traumatology & Surgery']}
+  ]},
+  MDS:{label:'MDS',cls:'b-amber',groups:[
+    {n:'Dental',items:['Orthodontics & Dentofacial Orthopaedics','Oral & Maxillofacial Surgery','Prosthodontics & Crown & Bridge','Periodontics','Pedodontics & Preventive Dentistry','Conservative Dentistry & Endodontics','Oral Medicine & Radiology','Oral Pathology & Microbiology','Public Health Dentistry']}
+  ]},
+  Diploma:{label:'PG Diploma',cls:'b-purple',groups:[
+    {n:'Diploma',items:['Diploma in Anaesthesiology (DA)','Diploma in Obstetrics & Gynaecology (DGO)','Diploma in Child Health (DCH)','Diploma in Ophthalmology (DO)','Diploma in Otorhinolaryngology (DLO)','Diploma in Orthopaedics (D.Ortho)','Diploma in Psychological Medicine (DPM)','Diploma in Clinical Pathology (DCP)','Diploma in Dermatology, Venereology & Leprosy (DDVL)','Diploma in Radio-Diagnosis (DMRD)','Diploma in Radiotherapy (DMRT)','Diploma in Public Health (DPH)','Diploma in Tuberculosis & Chest Diseases (DTCD)','Diploma in Family Medicine (DFM)','Diploma in Medical Laboratory Technology','Diploma in Tropical Medicine & Hygiene','Diploma in Medical Administration','Diploma in Occupational Health','Diploma in Aviation Medicine','Diploma in Industrial Medicine','Diploma in Nutrition & Dietetics','Diploma in Health Education','Diploma in Maternity & Child Welfare']}
+  ]},
+  DNB:{label:'DNB',cls:'b-red',groups:[
+    {n:'All branches',items:['DNB General Medicine','DNB Paediatrics','DNB Dermatology, Venereology & Leprosy','DNB Radio-Diagnosis','DNB Anaesthesiology','DNB Obstetrics & Gynaecology','DNB Psychiatry','DNB Respiratory Diseases','DNB Emergency Medicine','DNB Ophthalmology','DNB Otorhinolaryngology (ENT)','DNB Orthopaedics','DNB General Surgery','DNB Pathology','DNB Microbiology','DNB Pharmacology','DNB Community Medicine','DNB Forensic Medicine','DNB Anatomy','DNB Physiology','DNB Biochemistry','DNB Physical Medicine & Rehabilitation','DNB Geriatrics','DNB Sports Medicine','DNB Nuclear Medicine','DNB Radiation Oncology','DNB Immuno-haematology & Blood Transfusion','DNB Palliative Medicine','DNB Hospital Administration']}
+  ]},
+  DM:{label:'DM',cls:'b-blue',groups:[
+    {n:'Super Speciality',items:['Cardiology','Neurology','Nephrology','Gastroenterology','Endocrinology & Metabolism','Pulmonology / Respiratory & Critical Care Medicine','Haematology','Medical Oncology','Hepatology','Neonatology','Paediatric Cardiology','Paediatric Neurology','Clinical Pharmacology','Clinical Immunology & Rheumatology','Allergy & Clinical Immunology','Infectious Diseases','Medical Genetics','Geriatric Medicine','Reproductive Medicine','Critical Care Medicine']}
+  ]},
+  MCh:{label:'MCh',cls:'b-purple',groups:[
+    {n:'Super Speciality',items:['Cardiothoracic & Vascular Surgery','Neurosurgery','Urology & Renal Transplantation','Plastic & Reconstructive Surgery','Paediatric Surgery','Surgical Oncology','Vascular Surgery','Hand Surgery & Microsurgery','Minimal Access Surgery','Burns, Plastic & Maxillofacial Surgery','Reproductive Medicine & Surgery','Head & Neck Surgery','Endocrine Surgery','Hepatobiliary & GI Surgery','Gynaecological Oncology','Thoracic Surgery','Trauma Surgery']}
+  ]}
+};
+
+const EXAM_DEG = {
+  'NEET PG 2026':['MD','MS','Diploma','DNB'],
+  'INI-CET July 2026 (for July session)':['MD','MS','MDS','DM','MCh'],
+  'NEET MDS 2026':['MDS'],
+  'NEET SS 2026':['DM','MCh']
+};
+
+let S = {degree:'',spec:'',inst:'',ctype:'',cat:'',state:'',city:'',college:'',search:''};
+let activeIdx = -1;
+
+// ── Filtering ────────────────────────────────────
+function getFiltered() {
+  return RAW.filter(r => {
+    if (S.search) {
+      const q = S.search.toLowerCase();
+      if (!((r['College Name']||'').toLowerCase().includes(q)
+         || (r['City']||'').toLowerCase().includes(q)
+         || (r['State']||'').toLowerCase().includes(q))) return false;
+    }
+    if (S.inst === 'cn'    && !CN_TYPES.includes(r['College Type'])) return false;
+    if (S.inst === 'state' &&  CN_TYPES.includes(r['College Type'])) return false;
+    if (S.ctype === 'gov'   && !GOV_TYPES.includes(r['College Type'])) return false;
+    if (S.ctype === 'pvt'   && !PVT_TYPES.includes(r['College Type'])) return false;
+    if (S.ctype === 'deemed'&& !r['College Type'].startsWith('Deemed')) return false;
+    if (S.ctype === 'cn'    && !CN_TYPES.includes(r['College Type'])) return false;
+    if (S.cat    && r['College Type'] !== S.cat) return false;
+    if (S.state  && r['State'] !== S.state) return false;
+    if (S.city   && r['City']  !== S.city)  return false;
+    if (S.college&& r['College Name'] !== S.college) return false;
+    return true;
+  });
+}
+
+// ── Spec search widget ────────────────────────────
+function getSpecGroups() {
+  if (S.degree && DS[S.degree]) return DS[S.degree].groups;
+  const all = [];
+  Object.entries(DS).forEach(([k,v]) => v.groups.forEach(g => all.push({n: k+' — '+g.n, items: g.items})));
+  return all;
+}
+
+function renderSpecDD(q) {
+  const dd = document.getElementById('spec-dd');
+  const groups = getSpecGroups();
+  const ql = q.toLowerCase();
+  let html = '', count = 0;
+  groups.forEach(g => {
+    const matched = g.items.filter(i => !ql || i.toLowerCase().includes(ql));
+    if (!matched.length) return;
+    html += '<div class="spec-ghdr">' + g.n + '</div>';
+    matched.forEach(item => {
+      const isSel = item === S.spec;
+      const highlighted = ql
+        ? item.replace(new RegExp('(' + ql.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')','gi'),'<b>$1</b>')
+        : item;
+      html += '<div class="spec-opt' + (isSel?' sel':'') + '" data-val="' + item.replace(/"/g,'&quot;') + '" onmousedown="handleSpecClick(this)">' + highlighted + '</div>';
+      count++;
+    });
+  });
+  dd.innerHTML = count ? html : '<div class="spec-nores">No matching specialization</div>';
+  dd.classList.add('open');
+}
+
+function focusSpecInput() { document.getElementById('spec-txt').focus(); }
+
+function openSpecDD() { renderSpecDD(document.getElementById('spec-txt').value); }
+
+function onSpecInput() { renderSpecDD(document.getElementById('spec-txt').value); }
+
+function handleSpecClick(el) {
+  selectSpec(el.getAttribute('data-val'));
+}
+
+function selectSpec(val) {
+  S.spec = val;
+  const slot = document.getElementById('spec-pill-slot');
+  slot.innerHTML = '<span class="spec-pill"><span class="spec-pill-txt" title="' + val + '">' + val + '</span><span class="spec-x" onmousedown="clearSpec(event)">&#10005;</span></span>';
+  const inp = document.getElementById('spec-txt');
+  inp.value = '';
+  inp.style.cssText = 'width:0;min-width:0;flex:0';
+  document.getElementById('spec-dd').classList.remove('open');
+  doRender();
+}
+
+function clearSpec(e) {
+  if (e) e.preventDefault();
+  S.spec = '';
+  document.getElementById('spec-pill-slot').innerHTML = '';
+  const inp = document.getElementById('spec-txt');
+  inp.value = '';
+  inp.style.cssText = '';
+  document.getElementById('spec-dd').classList.remove('open');
+  doRender();
+}
+
+document.addEventListener('click', e => {
+  const wrap = document.getElementById('spec-wrap');
+  if (wrap && !wrap.contains(e.target)) document.getElementById('spec-dd').classList.remove('open');
+});
+
+// ── College card render ───────────────────────────
+function bclass(ct) {
+  if (ct.includes('AIIMS')||ct.includes('INI')) return 'b-blue';
+  if (ct.startsWith('Deemed')) return 'b-amber';
+  if (ct.includes('Private')) return 'b-purple';
+  if (ct.includes('Central')) return 'b-red';
+  return 'b-green';
+}
+
+function dr(k,v) {
+  return '<div class="dr"><span class="dk">'+k+'</span><span class="dv">'+(v||'—')+'</span></div>';
+}
+
+function buildSpecBlock(r) {
+  const degs = (EXAM_DEG[r.exam] || ['MD','MS']).filter(d => DS[d]);
+  const selDeg = S.degree;
+  const selSpec = S.spec;
+  const toShow = selDeg && DS[selDeg] ? [selDeg] : degs;
+  const cols = Math.min(toShow.length, 3);
+
+  let h = '<div class="spec-section">';
+  h += '<div class="spec-sec-title">Specializations available at this college</div>';
+
+  if (!selDeg && r['Specializations (PG)']) {
+    h += '<div class="spec-raw"><b>From college data</b>' + r['Specializations (PG)'] + '</div>';
+  }
+  if (selSpec) {
+    h += '<div class="spec-active-pill"><b>Selected specialization</b>' + selSpec + '</div>';
+  }
+
+  h += '<div class="sdeg-grid" style="grid-template-columns:repeat('+cols+',1fr)">';
+  toShow.forEach(dk => {
+    const d = DS[dk];
+    const total = d.groups.reduce((a,g) => a+g.items.length, 0);
+    h += '<div class="sdeg">';
+    h += '<div class="sdeg-hdr badge '+d.cls+'" style="border-radius:0"><span>'+d.label+'</span><span class="sdeg-cnt">'+total+' branches</span></div>';
+    d.groups.forEach(g => {
+      if (d.groups.length > 1) h += '<div class="sgrp-name">'+g.n+'</div>';
+      g.items.forEach(item => {
+        const isMatch = selSpec && item.toLowerCase().includes(selSpec.toLowerCase());
+        h += '<div class="sitem'+(isMatch?' match':'')+'">'+( isMatch ? '&#10003; ' : '')+item+'</div>';
+      });
+    });
+    h += '</div>';
+  });
+  h += '</div></div>';
+  return h;
+}
+
+function renderCard(r, idx) {
+  const ex = EXAM_DATA[r.exam] || {};
+  const isOpen = activeIdx === idx;
+  const examShort = (r.exam||'').split(' ').slice(0,2).join(' ');
+  return '<div class="ccard'+(isOpen?' open':'')+'" id="card-'+idx+'">'
+    + '<div class="ch" onclick="toggle('+idx+')">'
+    +   '<div style="flex:1;min-width:0">'
+    +     '<div class="ctitle">'+r['College Name']+'</div>'
+    +     '<div class="csub">'+r['City']+', '+r['State']+'</div>'
+    +   '</div>'
+    +   '<div class="cbadges">'
+    +     '<span class="badge '+bclass(r['College Type'])+'">'+r['College Type']+'</span>'
+    +     '<span class="badge b-grey">'+examShort+'</span>'
+    +   '</div>'
+    + '</div>'
+    + '<div class="cdetail'+(isOpen?' open':'')+'">'
+    +   '<div class="metrics">'
+    +     '<div class="mbox"><div class="mval">'+(r['PG Seats (approx)']||'—')+'</div><div class="mkey">PG Seats</div></div>'
+    +     '<div class="mbox"><div class="mval">'+(ex['No. of Questions']||'—')+'</div><div class="mkey">Questions</div></div>'
+    +     '<div class="mbox"><div class="mval">'+(ex['Duration']||'—')+'</div><div class="mkey">Duration</div></div>'
+    +     '<div class="mbox"><div class="mval">'+(ex['Exam Fee (General)']||'—')+'</div><div class="mkey">Exam Fee</div></div>'
+    +   '</div>'
+    +   '<div class="det2">'
+    +     '<div>'
+    +       '<div class="dsec">College</div>'
+    +       dr('Name', r['College Name'])
+    +       dr('City', r['City'])
+    +       dr('State', r['State'])
+    +       dr('Type', r['College Type'])
+    +       dr('PG Fee / Year', r['Potential PG Fee / Year'])
+    +       dr('PG Seats', r['PG Seats (approx)'])
+    +       dr('Admission Route', r['Admission Route'])
+    +       dr('Counselling', r['Who Manages Counselling'])
+    +     '</div>'
+    +     '<div>'
+    +       '<div class="dsec">Exam</div>'
+    +       dr('Exam', r.exam)
+    +       dr('Exam Date', ex['Exam Date'])
+    +       dr('Result Date', ex['Result Date'])
+    +       dr('Questions', ex['No. of Questions'])
+    +       dr('Duration', ex['Duration'])
+    +       dr('Session', ex['Session'])
+    +       dr('Negative Marking', ex['Negative Marking'])
+    +       '<div class="dsec">Registration</div>'
+    +       dr('Opens', ex['Registration Opens'])
+    +       dr('Closes', ex['Registration Closes'])
+    +       dr('City Intimation', ex['City Intimation Slip'])
+    +       dr('Admit Card', ex['Admit Card Release'])
+    +       dr('Apply at', ex['Application Link'])
+    +     '</div>'
+    +     '<div>'
+    +       '<div class="dsec">Counselling</div>'
+    +       dr('MCC AIQ', ex['MCC AIQ Counselling'])
+    +       dr('KEA Karnataka', ex['Karnataka KEA Counselling'])
+    +     '</div>'
+    +     '<div>'
+    +       '<div class="dsec">Eligibility</div>'
+    +       dr('Age Limit', ex['Age Limit'])
+    +       dr('Qualifying %ile', ex['Qualifying Percentile'])
+    +       dr('Eligibility', ex['Eligibility'])
+    +     '</div>'
+    +   '</div>'
+    +   buildSpecBlock(r)
+    + '</div>'
+  + '</div>';
+}
+
+function toggle(idx) {
+  activeIdx = activeIdx === idx ? -1 : idx;
+  doRender();
+}
+
+// ── Location repopulate ───────────────────────────
+function repop() {
+  const pool = getFiltered();
+  function opts(arr, cur) {
+    return arr.filter(Boolean).sort().map(v => '<option'+(v===cur?' selected':'')+'>'+v+'</option>').join('');
+  }
+  const uniq = (arr) => [...new Set(arr)];
+
+  const stSel = document.getElementById('f-state');
+  const curSt = S.state;
+  stSel.innerHTML = '<option value="">— All states —</option>' + opts(uniq(pool.map(r=>r['State'])), curSt);
+
+  const cityPool = S.state ? pool.filter(r=>r['State']===S.state) : pool;
+  const citySel = document.getElementById('f-city');
+  citySel.innerHTML = '<option value="">— All cities —</option>' + opts(uniq(cityPool.map(r=>r['City'])), S.city);
+
+  const colPool = S.city ? cityPool.filter(r=>r['City']===S.city) : cityPool;
+  const colSel = document.getElementById('f-college');
+  colSel.innerHTML = '<option value="">— All colleges —</option>' + opts(uniq(colPool.map(r=>r['College Name'])), S.college);
+}
+
+// ── Tags ──────────────────────────────────────────
+function updateTags() {
+  const items = [
+    S.degree  && {k:'Degree', v:S.degree},
+    S.spec    && {k:'Specialization', v:S.spec},
+    S.inst    && {k:'Institution', v:{cn:'Central & National',state:'State'}[S.inst]},
+    S.ctype   && {k:'Type', v:{gov:'Government',pvt:'Private',deemed:'Deemed',cn:'Central & National'}[S.ctype]},
+    S.cat     && {k:'Category', v:S.cat},
+    S.state   && {k:'State', v:S.state},
+    S.city    && {k:'City', v:S.city},
+    S.college && {k:'College', v:S.college},
+  ].filter(Boolean);
+  const tb = document.getElementById('tag-bar');
+  const rb = document.getElementById('btn-reset');
+  tb.style.display = items.length ? 'flex' : 'none';
+  rb.style.display = items.length ? 'block' : 'none';
+  tb.innerHTML = items.map(t=>'<span class="tag"><b>'+t.k+':</b> '+t.v+'</span>').join('');
+}
+
+// ── Main render ───────────────────────────────────
+function doRender() {
+  const filtered = getFiltered();
+  document.getElementById('rcount').textContent = filtered.length + ' college' + (filtered.length!==1?'s':'') + ' found';
+  document.getElementById('results').innerHTML = filtered.length
+    ? filtered.map((r,i) => renderCard(r,i)).join('')
+    : '<div class="empty">No colleges match the selected filters.</div>';
+  updateTags();
+}
+
+// ── Event handlers ────────────────────────────────
+function onSearch() {
+  S.search = document.getElementById('txt').value;
+  activeIdx = -1;
+  doRender();
+}
+
+function onDegreeChange() {
+  S.degree = document.getElementById('f-degree').value;
+  S.spec = '';
+  // clear spec pill
+  document.getElementById('spec-pill-slot').innerHTML = '';
+  const inp = document.getElementById('spec-txt');
+  inp.value = ''; inp.style.cssText = '';
+  document.getElementById('spec-dd').classList.remove('open');
+  activeIdx = -1;
+  doRender();
+}
+
+function onInstChange() {
+  S.inst = document.getElementById('f-inst').value;
+  S.ctype = ''; S.cat = ''; S.state = ''; S.city = ''; S.college = '';
+  activeIdx = -1;
+  const ctSel = document.getElementById('f-ctype');
+  const catGrp = document.getElementById('fg-cat');
+  if (S.inst === 'cn') {
+    ctSel.innerHTML = '<option value="">— All —</option><option value="cn">Central and National</option>';
+  } else if (S.inst === 'state') {
+    ctSel.innerHTML = '<option value="">— All —</option><option value="gov">Government</option><option value="pvt">Private</option><option value="deemed">Deemed</option>';
+  } else {
+    ctSel.innerHTML = '<option value="">— All —</option>';
+  }
+  catGrp.style.display = 'none';
+  repop(); doRender();
+}
+
+function onCtypeChange() {
+  S.ctype = document.getElementById('f-ctype').value;
+  S.cat = ''; S.state = ''; S.city = ''; S.college = '';
+  activeIdx = -1;
+  const cats = {cn:CN_TYPES,gov:GOV_TYPES,pvt:PVT_TYPES,deemed:DEEMED_TYPES}[S.ctype] || [];
+  const catSel = document.getElementById('f-cat');
+  const catGrp = document.getElementById('fg-cat');
+  if (cats.length) {
+    catGrp.style.display = 'block';
+    catSel.innerHTML = '<option value="">— All categories —</option>' + cats.map(c=>'<option>'+c+'</option>').join('');
+  } else {
+    catGrp.style.display = 'none';
+  }
+  repop(); doRender();
+}
+
+function onCatChange() {
+  S.cat = document.getElementById('f-cat').value;
+  S.state = ''; S.city = ''; S.college = '';
+  activeIdx = -1;
+  repop(); doRender();
+}
+
+function onStateChange() {
+  S.state = document.getElementById('f-state').value;
+  S.city = ''; S.college = '';
+  activeIdx = -1;
+  repop(); doRender();
+}
+
+function onCityChange() {
+  S.city = document.getElementById('f-city').value;
+  S.college = '';
+  activeIdx = -1;
+  repop(); doRender();
+}
+
+function onCollegeSelect() {
+  S.college = document.getElementById('f-college').value;
+  activeIdx = -1;
+  const f = getFiltered();
+  if (f.length === 1) activeIdx = 0;
+  doRender();
+}
+
+function resetAll() {
+  S = {degree:'',spec:'',inst:'',ctype:'',cat:'',state:'',city:'',college:'',search:''};
+  activeIdx = -1;
+  document.getElementById('txt').value = '';
+  ['f-degree','f-inst','f-ctype','f-cat','f-state','f-city','f-college'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  document.getElementById('f-ctype').innerHTML = '<option value="">— All —</option>';
+  document.getElementById('fg-cat').style.display = 'none';
+  document.getElementById('spec-pill-slot').innerHTML = '';
+  const inp = document.getElementById('spec-txt'); inp.value=''; inp.style.cssText='';
+  document.getElementById('spec-dd').classList.remove('open');
+  repop(); doRender();
+}
+
+// init
+repop();
+doRender();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(r => console.log('SW registered'))
+      .catch(e => console.log('SW failed', e));
+  });
+}
+</script>
+
+<script>
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const banner = document.getElementById('install-banner');
+  if (banner) banner.style.display = 'flex';
+});
+document.getElementById('install-btn')?.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  document.getElementById('install-banner').style.display = 'none';
+});
+window.addEventListener('appinstalled', () => {
+  document.getElementById('install-banner').style.display = 'none';
+});
+</script>
+</body>
+</html>
